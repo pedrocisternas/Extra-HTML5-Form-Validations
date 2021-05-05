@@ -1,13 +1,26 @@
-/* eslint-disable */
 import "bootstrap";
 import "./style.css";
 
 import "./assets/img/rigo-baby.jpg";
 import "./assets/img/4geeks.ico";
 
-window.onload = function() {};
+const eMsg = msg => {
+  var error = document.querySelector(".alert");
+  error.classList.contains("d-none") && error.classList.toggle("d-none");
+  error.innerHTML += `<p>${msg}</p>`;
+};
 
-document.querySelector("form").addEventListener("submit", e => {
+const submitForm = e => {
+  e.preventDefault();
+
+  const error = document.getElementById("errorMsg");
+  !error.classList.contains("d-none") && error.classList.toggle("d-none");
+  error.innerHTML = "";
+
+  document
+    .querySelectorAll("input")
+    .forEach(element => element.classList.remove("is-invalid"));
+
   const card = document.getElementById("inputCard");
   const cvc = document.getElementById("inputCVC");
   const amount = document.getElementById("inputAmount");
@@ -16,47 +29,39 @@ document.querySelector("form").addEventListener("submit", e => {
   const city = document.getElementById("inputCity");
   const state = document.getElementById("inputState");
   const postal = document.getElementById("inputPostalCode");
-  const error = document.getElementById("errorMsg");
 
-  console.log(card.value);
-  if (!card.value || card.value.length < 16) {
-    e.preventDefault();
-    card.style.backgroundColor = "red";
-    card.value = "";
+  if (card.value.length != 16) {
+    eMsg("Card number needs to be 16 digits.");
+    card.classList.add("is-invalid");
   }
-  if (!cvc.value || cvc.value.length < 4) {
-    e.preventDefault();
-    cvc.style.backgroundColor = "red";
-    cvc.value = "";
+  if (cvc.value.length != 3) {
+    eMsg("CVC needs to be 3 digits.");
+    cvc.classList.add("is-invalid");
   }
-  if (!amount.value) {
-    e.preventDefault();
-    amount.style.backgroundColor = "red";
-    amount.value = "";
+  if (amount.value.length < 1) {
+    eMsg("Insert valid amount");
+    amount.classList.add("is-invalid");
   }
-  if (!fn.value || fn.value.length < 2) {
-    e.preventDefault();
-    fn.style.backgroundColor = "red";
-    fn.value = "";
+  if (fn.value.length < 2) {
+    eMsg("Insert valid first name");
+    fn.classList.add("is-invalid");
   }
-  if (!ln.value || ln.value.length < 2) {
-    e.preventDefault();
-    ln.style.backgroundColor = "red";
-    ln.value = "";
+  if (ln.value.length < 2) {
+    eMsg("Insert valid last name");
+    ln.classList.add("is-invalid");
   }
-  if (!city.value || city.value.length < 4) {
-    e.preventDefault();
-    city.style.backgroundColor = "red";
-    city.value = "";
+  if (city.value.length < 2) {
+    eMsg("Insert valid City");
+    city.classList.add("is-invalid");
   }
-  if (!state.value) {
-    e.preventDefault();
-    state.style.backgroundColor = "red";
-    state.value = "";
+  if (state.value == "Pick State") {
+    eMsg("Select a state");
+    state.classList.add("is-invalid");
   }
-  if (!postal.value | (postal.value.length < 4)) {
-    e.preventDefault();
-    postal.style.backgroundColor = "red";
-    postal.value = "";
+  if (postal.value.length < 2) {
+    eMsg("Insert valid postal code");
+    postal.classList.add("is-invalid");
   }
-});
+};
+
+document.getElementById("form").addEventListener("submit", submitForm);
